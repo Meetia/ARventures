@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private static final int REQUEST_LOCATION_PERMISSION = 300;
     private boolean mFlashSupported;
+    private Location tisch;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     @Override
@@ -88,15 +89,28 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.arrow);
         imageView.setRotation(90);
 
+        startGPS();
+
+
+    }
+    protected void startGPS(){
+        tisch = new Location("");
+        tisch.setLatitude(42.406266);
+        tisch.setLongitude(-71.118899);
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                TextView txtView = (TextView) findViewById(R.id.LocationText);
-                String s = location.getLatitude() + ", " + location.getLongitude();
-                txtView.setText(s);
-                Log.d("DEBUGGING", s);
+                TextView locView = (TextView) findViewById(R.id.LocationText);
+                String loc_s = location.getLatitude() + ", " + location.getLongitude();
+                locView.setText(loc_s);
+                Log.d("DEBUGGING", loc_s);
+
+
+                TextView bearingView = (TextView) findViewById(R.id.bearingText);
+                String bearing_s = "" + location.bearingTo(tisch);
+                bearingView.setText(bearing_s);
 
             }
             @Override
@@ -124,12 +138,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+
+
+
+
         /*
         COORDS FOR TISCH: 42.406266, -71.118899
          */
-
-
     }
+
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {

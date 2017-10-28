@@ -43,5 +43,17 @@
 
         />
 
+    <TextView
+        android:id="@+id/bearingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/arrow"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="124dp"
+
+        android:text="dankermemesxdddd"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="40dp" />
+
 
 </RelativeLayout>
