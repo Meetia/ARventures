@@ -38,6 +38,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
 import jumbois.arventures.R;
 
@@ -50,7 +54,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "MainActivity";
     private Button takePictureButton;
     private TextureView textureView;
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
     private Location tisch;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private SensorManager mSensorManager;
+    Sensor accelerometer;
+    Sensor magnetometer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +97,11 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.arrow);
         imageView.setRotation(90);
 
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
         startGPS();
-
-
     }
     protected void startGPS(){
         tisch = new Location("");
@@ -148,6 +158,30 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {  }
+
+    float[] mGravity;
+    float[] mGeomagnetic;
+    public void onSensorChanged(SensorEvent event) {
+        TextView azimuthText = (TextView) findViewById(R.id.azimuthText);
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+            mGravity = event.values;
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+            mGeomagnetic = event.values;
+        if (mGravity != null && mGeomagnetic != null) {
+
+            float R[] = new float[9];
+            float I[] = new float[9];
+            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+
+            if (success) {
+                float orientation[] = new float[3];
+                SensorManager.getOrientation(R, orientation);
+                String azOut = Float.toString(orientation[0] * (float) 0.01745329252);
+                azimuthText.setText(azOut);
+            }
+        }
+    }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -296,6 +330,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             textureView.setSurfaceTextureListener(textureListener);
         }
+
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+
     }
     @Override
     protected void onPause() {
@@ -303,5 +341,7 @@ public class MainActivity extends AppCompatActivity {
         //closeCamera();
         stopBackgroundThread();
         super.onPause();
+        mSensorManager.unregisterListener(this);
+
     }
 }

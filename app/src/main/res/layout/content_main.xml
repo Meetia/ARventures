@@ -28,7 +28,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        app:srcCompat="@drawable/face" />
+        app:srcCompat="@drawable/hawt" />
 
     <TextView
         android:id="@+id/LocationText"
@@ -52,6 +52,16 @@
         android:layout_marginBottom="124dp"
 
         android:text="dankermemesxdddd"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="40dp" />
+
+    <TextView
+        android:id="@+id/azimuthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="234dp"
+        android:text="to dank to meme xdddd"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="40dp" />
 
