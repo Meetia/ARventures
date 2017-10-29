@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
+import android.hardware.GeomagneticField;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -81,8 +82,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private SensorManager mSensorManager;
-    Sensor accelerometer;
-    Sensor magnetometer;
+    private float dest_bearing;
+    private float declination;
+    private GeomagneticField geoField;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +99,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
         imageView = (ImageView) findViewById(R.id.arrow);
-        imageView.setRotation(90);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         startGPS();
+        declination = 20;
     }
     protected void startGPS(){
         tisch = new Location("");
@@ -112,12 +116,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
+                geoField = new GeomagneticField(
+                        Double.valueOf(location.getLatitude()).floatValue(),
+                        Double.valueOf(location.getLongitude()).floatValue(),
+                        Double.valueOf(location.getAltitude()).floatValue(),
+                        System.currentTimeMillis()
+                );
+
                 TextView locView = (TextView) findViewById(R.id.LocationText);
                 String loc_s = location.getLatitude() + ", " + location.getLongitude();
                 locView.setText(loc_s);
                 Log.d("DEBUGGING", loc_s);
 
-
+                dest_bearing = location.bearingTo(tisch);
                 TextView bearingView = (TextView) findViewById(R.id.bearingText);
                 String bearing_s = "" + location.bearingTo(tisch);
                 bearingView.setText(bearing_s);
@@ -177,7 +189,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if (success) {
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
-                String azOut = Float.toString(orientation[0] * (float) 0.01745329252);
+                float degree = orientation[0] * (float) (1.0/0.01745329252);
+                String azOut = Float.toString(degree); //* (float) 0.01745329252);
+                declination = geoField.getDeclination();
+                imageView.setRotation(degree - dest_bearing + declination);
                 azimuthText.setText(azOut);
             }
         }

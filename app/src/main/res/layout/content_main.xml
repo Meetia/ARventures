@@ -28,7 +28,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        app:srcCompat="@drawable/hawt" />
+        app:srcCompat="@drawable/arrow" />
 
     <TextView
         android:id="@+id/LocationText"
