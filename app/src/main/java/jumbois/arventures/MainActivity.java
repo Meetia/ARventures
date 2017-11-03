@@ -191,8 +191,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 SensorManager.getOrientation(R, orientation);
                 float degree = orientation[0] * (float) (1.0/0.01745329252);
                 String azOut = Float.toString(degree); //* (float) 0.01745329252);
-                declination = geoField.getDeclination();
-                imageView.setRotation(degree - dest_bearing + declination);
+                if(geoField != null)
+                    declination = geoField.getDeclination();
+                //dest_bearing += declination;
+                //degree = (dest_bearing - degree) * -1;
+                /*
+                    degree = heading - compass from self to magnetic north
+                    dest_bearing = bearing - bearing from self to tisch in magnetic north
+
+                */
+                imageView.setRotation(dest_bearing - degree + declination);
                 azimuthText.setText(azOut);
             }
         }
