@@ -11,7 +11,7 @@
 
 
     <TextureView
-
+        android:contentDescription="@string/camera"
         android:id="@+id/texture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
 
 
     <ImageView
-
+        android:contentDescription="@string/ArrowToRotate"
         android:id="@+id/arrow"
         android:rotation="0"
         android:layout_width="wrap_content"
@@ -37,9 +37,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="87dp"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:textColor="@color/colorPrimaryDark"
-        android:text="dankmemesxd"
 
         />
 
@@ -51,9 +50,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="124dp"
 
-        android:text="dankermemesxdddd"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="40dp" />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/azimuthText"
@@ -61,9 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="234dp"
-        android:text="to dank to meme xdddd"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="40dp" />
+        android:textSize="40sp" />
 
 
 </RelativeLayout>

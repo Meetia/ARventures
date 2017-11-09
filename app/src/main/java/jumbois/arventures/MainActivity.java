@@ -151,13 +151,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         };
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             System.out.println(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION));
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
             }
-        }
+        //}
 
         locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
 
