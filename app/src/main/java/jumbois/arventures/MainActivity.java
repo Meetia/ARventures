@@ -86,7 +86,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Intent getPosition = getIntent();
         Bundle bundle = getPosition.getParcelableExtra("bundle");
         LatLng pos = bundle.getParcelable("position");
-
+        String addrLine = getPosition.getStringExtra("addrLine");
+        TextView addressView = (TextView) findViewById(R.id.addressView);
+        addressView.setText(addrLine);
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);

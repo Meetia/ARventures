@@ -109,6 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         EditText et = (EditText) findViewById(R.id.addressInput);
         String addr = et.getText().toString();
+        String addrFound = "";
         if (addr != "") {
             Geocoder geocoder = new Geocoder(this);
             List<Address> addresses;
@@ -117,16 +118,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(addresses != null && addresses.size() > 0) {
                     double latitude= addresses.get(0).getLatitude();
                     double longitude= addresses.get(0).getLongitude();
-
+                    addrFound = addresses.get(0).getAddressLine(0);
                     addrPos = new LatLng(latitude, longitude);
                 }
             } catch (IOException ioException) {
                 Log.e("Exception", "Service not available");
             }
         }
-
+        
         Bundle args = new Bundle();
         args.putParcelable("position", addrPos);
+        getMainScreenIntent.putExtra("addrLine", addrFound);
         getMainScreenIntent.putExtra("bundle", args);
         startActivity(getMainScreenIntent);
     }

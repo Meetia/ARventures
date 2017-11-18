@@ -7,9 +7,6 @@
     android:orientation="vertical">
 
 
-
-
-
     <TextureView
         android:contentDescription="@string/camera"
         android:id="@+id/texture"
@@ -22,12 +19,27 @@
         android:id="@+id/arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
         android:layout_alignTop="@+id/azimuthText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="-0dp"
         android:contentDescription="@string/ArrowToRotate"
         android:rotation="0"
+        android:alpha="0.5"
         app:srcCompat="@drawable/arrow" />
+
+    <TextView
+        android:id="@+id/addressView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="575dp"
+        android:text=""
+        android:textColor="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:textSize="15sp" />
 
     <TextView
         android:visibility="invisible"
