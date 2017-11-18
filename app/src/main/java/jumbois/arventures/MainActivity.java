@@ -156,11 +156,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //}
         Criteria criteria = new Criteria();
         locationManager.requestLocationUpdates(locationManager.getBestProvider(criteria, false), 0, 0, locationListener);
-        //locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
-        //locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-
-
 
         /*
         COORDS FOR TISCH: 42.406266, -71.118899

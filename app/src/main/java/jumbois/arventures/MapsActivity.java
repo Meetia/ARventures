@@ -96,7 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onStartClick(View view) {
-        Intent getMainScreenIntent = new Intent(this, MapsActivity.class);
+        Intent getMainScreenIntent = new Intent(this, MainActivity.class);
         Bundle args = new Bundle();
         args.putParcelable("position", marker.getPosition());
         getMainScreenIntent.putExtra("bundle", args);

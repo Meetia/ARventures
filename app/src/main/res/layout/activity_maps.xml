@@ -23,5 +23,15 @@
          android:layout_height="match_parent"
          tools:context="jumbois.arventures.MapsActivity" />
 
+     <EditText
+         android:id="@+id/editText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:ems="10"
+         android:layout_alignTop="@+id/button2"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="-50dp"
+         android:inputType="textPostalAddress" />
+
  </RelativeLayout>
 
