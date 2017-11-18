@@ -3,15 +3,19 @@ package jumbois.arventures;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.nfc.Tag;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +27,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
@@ -97,8 +105,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onStartClick(View view) {
         Intent getMainScreenIntent = new Intent(this, MainActivity.class);
+        LatLng addrPos = marker.getPosition();
+
+        EditText et = (EditText) findViewById(R.id.addressInput);
+        String addr = et.getText().toString();
+        if (addr != "") {
+            Geocoder geocoder = new Geocoder(this);
+            List<Address> addresses;
+            try {
+                addresses = geocoder.getFromLocationName(addr, 1);
+                if(addresses != null && addresses.size() > 0) {
+                    double latitude= addresses.get(0).getLatitude();
+                    double longitude= addresses.get(0).getLongitude();
+
+                    addrPos = new LatLng(latitude, longitude);
+                }
+            } catch (IOException ioException) {
+                Log.e("Exception", "Service not available");
+            }
+        }
+
         Bundle args = new Bundle();
-        args.putParcelable("position", marker.getPosition());
+        args.putParcelable("position", addrPos);
         getMainScreenIntent.putExtra("bundle", args);
         startActivity(getMainScreenIntent);
     }
