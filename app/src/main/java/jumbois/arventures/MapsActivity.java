@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.content.Intent;
+import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -91,6 +93,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // TODO Auto-generated method stub
         Log.d("arg0", pos.latitude + "-" + pos.longitude);
         marker.setPosition(pos);
+    }
+
+    public void onStartClick(View view) {
+        Intent getMainScreenIntent = new Intent(this, MapsActivity.class);
+        Bundle args = new Bundle();
+        args.putParcelable("position", marker.getPosition());
+        getMainScreenIntent.putExtra("bundle", args);
+        startActivity(getMainScreenIntent);
     }
 
 }

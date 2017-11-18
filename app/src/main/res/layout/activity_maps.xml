@@ -12,8 +12,9 @@
          android:layout_alignBottom="@+id/map"
          android:layout_centerHorizontal="true"
          android:layout_marginTop="120dp"
-         android:text="Direct Me!"
-         android:backgroundTint="@color/colorAccent"/>
+         android:backgroundTint="@color/colorAccent"
+         android:onClick="onStartClick"
+         android:text="Direct Me!" />
 
      <fragment
          android:id="@+id/map"

@@ -3,8 +3,6 @@ package jumbois.arventures;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.ImageFormat;
-import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.GeomagneticField;
 import android.hardware.camera2.CameraAccessException;
@@ -20,11 +18,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.media.ImageReader;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -35,7 +30,6 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,20 +38,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.content.Intent;
 
-import jumbois.arventures.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static android.location.Criteria.ACCURACY_FINE;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "MainActivity";
@@ -82,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private static final int REQUEST_LOCATION_PERMISSION = 300;
     private boolean mFlashSupported;
-    private Location tisch;
+    private Location destination;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private SensorManager mSensorManager;
@@ -97,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent getPosition = getIntent();
+        Bundle bundle = getPosition.getParcelableExtra("bundle");
+        LatLng pos = bundle.getParcelable("position");
+
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
@@ -108,15 +98,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         Log.d("DEBUG", "BEFORE STARTING GPS ==================================================");
-        startGPS();
+        startGPS(pos);
 
         declination = 20;
     }
-    protected void startGPS(){
+    protected void startGPS(LatLng pos){
         Log.d("DEBUG", "INSIDE GPS ==================================================");
-        tisch = new Location("");
-        tisch.setLatitude(42.406266);
-        tisch.setLongitude(-71.118899);
+        destination = new Location("");
+        destination.setLatitude(pos.latitude);
+        destination.setLongitude(pos.longitude);
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
@@ -135,9 +125,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 locView.setText(loc_s);
                 Log.d("DEBUGGING", loc_s + "AFTER SETTING THE TEXT=====================================");
 
-                dest_bearing = location.bearingTo(tisch);
+                dest_bearing = location.bearingTo(destination);
                 TextView bearingView = (TextView) findViewById(R.id.bearingText);
-                String bearing_s = "" + location.bearingTo(tisch);
+                String bearing_s = "" + location.bearingTo(destination);
                 bearingView.setText(bearing_s);
 
             }
@@ -204,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //degree = (dest_bearing - degree) * -1;
                 /*
                     degree = heading - compass from self to magnetic north
-                    dest_bearing = bearing - bearing from self to tisch in magnetic north
+                    dest_bearing = bearing - bearing from self to destination in magnetic north
 
                 */
                 imageView.setRotation(dest_bearing - degree + declination);
