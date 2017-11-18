@@ -18,19 +18,19 @@
         android:layout_alignParentTop="true"/>
 
 
-
     <ImageView
-        android:contentDescription="@string/ArrowToRotate"
         android:id="@+id/arrow"
-        android:rotation="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/azimuthText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="@string/ArrowToRotate"
+        android:rotation="0"
         app:srcCompat="@drawable/arrow" />
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/LocationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +43,7 @@
         />
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/bearingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,6 +55,7 @@
         android:textSize="40sp" />
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/azimuthText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

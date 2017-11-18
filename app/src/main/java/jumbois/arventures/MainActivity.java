@@ -16,6 +16,7 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -55,6 +56,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.location.Criteria.ACCURACY_FINE;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "MainActivity";
     private Button takePictureButton;
@@ -103,11 +107,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
+        Log.d("DEBUG", "BEFORE STARTING GPS ==================================================");
         startGPS();
+
         declination = 20;
     }
     protected void startGPS(){
+        Log.d("DEBUG", "INSIDE GPS ==================================================");
         tisch = new Location("");
         tisch.setLatitude(42.406266);
         tisch.setLongitude(-71.118899);
@@ -116,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
+                Log.d("DEBUG", "INSIDE LOCATION CHANGED ==================================================");
                 geoField = new GeomagneticField(
                         Double.valueOf(location.getLatitude()).floatValue(),
                         Double.valueOf(location.getLongitude()).floatValue(),
@@ -127,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 TextView locView = (TextView) findViewById(R.id.LocationText);
                 String loc_s = location.getLatitude() + ", " + location.getLongitude();
                 locView.setText(loc_s);
-                Log.d("DEBUGGING", loc_s);
+                Log.d("DEBUGGING", loc_s + "AFTER SETTING THE TEXT=====================================");
 
                 dest_bearing = location.bearingTo(tisch);
                 TextView bearingView = (TextView) findViewById(R.id.bearingText);
@@ -158,9 +164,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
             }
         //}
-
-        locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
-
+        Criteria criteria = new Criteria();
+        locationManager.requestLocationUpdates(locationManager.getBestProvider(criteria, false), 0, 0, locationListener);
+        //locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+        //locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
 
 
@@ -189,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if (success) {
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
-                float degree = orientation[0] * (float) (1.0/0.01745329252);
+                float degree = orientation[0] * (float) (1.0/0.01745329252); // magnetic north orientation
                 String azOut = Float.toString(degree); //* (float) 0.01745329252);
                 if(geoField != null)
                     declination = geoField.getDeclination();

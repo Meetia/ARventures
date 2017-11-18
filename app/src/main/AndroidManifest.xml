@@ -24,6 +24,9 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+
+
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -35,7 +38,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyASi3wIVIax6wDSFI8MowP-3G9X63eNKvk" />
+            android:value="AIzaSyCCtO7ZTfjnJt5fuPk-AlxQK2c4E4R3Pmc" />
 
         <activity
             android:name=".MapsActivity"
@@ -45,6 +48,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
 
