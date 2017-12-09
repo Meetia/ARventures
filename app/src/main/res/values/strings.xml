@@ -3,4 +3,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="ArrowToRotate">Green Arrow</string>
     <string name="camera">Camera Preview</string>
+    <string name="info">
+        Select the destination you want to go to! You can do this by tapping on the screen to place
+        a marker on your destination, or just input an address (doesn\'t have to be complete). Once
+        you have a destination, hit the "Direct Me!" button. An arrow will show you where you need to go relative
+        to where your camera is facing to arrive at your destination!
+    </string>
 </resources>
